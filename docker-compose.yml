@@ -1,0 +1,23 @@
+services:
+  djangoapp:
+    container_name: djangoapp
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./djangoapp:/djangoapp  # Mapeamento do diretório local para o diretório do contêiner
+      - ./data/web/static:/data/web/static/  # Mapeamento do diretório estático local para o contêiner
+      - ./data/web/media:/data/web/media/  # Mapeamento do diretório de mídia local para o contêiner
+    env_file:
+      - ./dotenv_files/.env
+    depends_on:
+      - market_db
+
+  market_db:
+    container_name: market_db
+    image: postgres:13
+    volumes:
+      - ./data/postgres/data:/var/lib/postgresql/data/
+    env_file:
+      - ./dotenv_files/.env
