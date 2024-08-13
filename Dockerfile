@@ -1,41 +1,44 @@
-# Usar a imagem oficial do Python
-FROM python:3.11
-LABEL maintainer="raniereWork@outlook.com"
+FROM python:3.11.3-alpine3.18
+LABEL mantainer="ranierepereir21@outlook.com"
 
-# Defina variáveis de ambiente
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Essa variável de ambiente é usada para controlar se o Python deve 
+# gravar arquivos de bytecode (.pyc) no disco. 1 = Não, 0 = Sim
+ENV PYTHONDONTWRITEBYTECODE 1
 
-# Cria um diretório de trabalho
-WORKDIR /code
+# Define que a saída do Python será exibida imediatamente no console ou em 
+# outros dispositivos de saída, sem ser armazenada em buffer.
+# Em resumo, você verá os outputs do Python em tempo real.
+ENV PYTHONUNBUFFERED 1
 
-# Cria um usuário não-root para segurança
-RUN adduser --disabled-password --no-create-home duser
-
-# Copia o código e requisitos da aplicação
-COPY djangoapp /code/djangoapp
-COPY requirements.txt /code/
+# Copia a pasta "djangoapp" e "scripts" para dentro do container.
+COPY djangoapp /djangoapp
 COPY scripts /scripts
 
-# Instala dependências do sistema e Python
-RUN apt-get update && \
-    apt-get install -y libpq-dev gcc netcat-openbsd && \
-    pip install --upgrade pip && \
-    pip install -r /code/requirements.txt && \
-    # Cria diretórios e define permissões
-    mkdir -p /data/web/static /data/web/media && \
-    chown -R duser:duser /data/web && \
+# Entra na pasta djangoapp no container
+WORKDIR /djangoapp
+
+# A porta 8000 estará disponível para conexões externas ao container
+# É a porta que vamos usar para o Django.
+EXPOSE 8000
+
+# RUN executa comandos em um shell dentro do container para construir a imagem. 
+# O resultado da execução do comando é armazenado no sistema de arquivos da 
+# imagem como uma nova camada.
+# Agrupar os comandos em um único RUN pode reduzir a quantidade de camadas da 
+# imagem e torná-la mais eficiente.
+RUN python -m venv /venv && \
+    /venv/bin/pip install --upgrade pip && \
+    /venv/bin/pip install -r /djangoapp/requirements.txt && \
+    mkdir -p /data/web/static && \
+    mkdir -p /data/web/media && \
     chmod -R 755 /data/web && \
     chmod -R +x /scripts
 
-# Define o diretório de trabalho para a aplicação
-WORKDIR /code/djangoapp
 
-# Define o usuário a ser utilizado
-USER duser
+# Adiciona a pasta scripts e venv/bin 
+# no $PATH do container.
+ENV PATH="/scripts:/venv/bin:$PATH"
 
-# Exponha a porta 8000 para a aplicação Django
-EXPOSE 8000
-
-# Define o comando padrão para iniciar a aplicação
+# Executa o arquivo scripts/commands.sh
 CMD ["commands.sh"]
+  
