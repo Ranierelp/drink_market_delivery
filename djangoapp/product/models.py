@@ -34,3 +34,5 @@ class orderItem(models.Model):
     order = models.ForeignKey(order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     
+    def __str__(self):
+        return f'{self.order.user.name} - {self.product.name}'

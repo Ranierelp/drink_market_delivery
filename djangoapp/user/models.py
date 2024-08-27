@@ -1,7 +1,6 @@
 from django.db import models 
 from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
-from address.models import Address
 
 class BaseModelQuerySet(models.QuerySet):
     def delete(self):
@@ -87,14 +86,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, BaseModel):
         
 class Customer(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    addresses = models.ManyToManyField(Address, through='UserAddress', related_name='establishments')
-    
+    cpf = models.CharField('CPF', max_length=11)
+        
     def __str__(self):
         return self.user.name
 
 class Establishment(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    addresses = models.ManyToManyField(Address, through='UserAddress', related_name='customers')    
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)    
     cnpj = models.CharField('CNPJ', max_length=14)
     
     def __str__(self):

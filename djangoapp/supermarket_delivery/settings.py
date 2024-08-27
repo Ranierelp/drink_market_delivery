@@ -40,6 +40,12 @@ INSTALLED_APPS = [
     
     #rest_framework
     'rest_framework',
+    'address',
+    'user',
+    'order',
+    'product',
+    'category',
+    
 ]
 
 MIDDLEWARE = [
