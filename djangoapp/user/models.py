@@ -1,3 +1,4 @@
+import uuid
 from django.db import models 
 from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
@@ -68,7 +69,8 @@ class UserManager(BaseUserManager):
         
         return self._create_user(email, password, **extra_fields)
     
-class CustomUser(AbstractBaseUser, PermissionsMixin, BaseModel):
+class CustomUser(AbstractBaseUser, BaseModel):
+    code = models.UUIDField("Código uuid4", default=uuid.uuid4, editable=False)
     name = models.CharField('Name', max_length=255)
     email = models.EmailField('Email', unique=True)
     phone = models.CharField('Phone', max_length=20)
@@ -85,6 +87,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, BaseModel):
         self.save()
         
 class Customer(models.Model):
+    code = models.UUIDField("Código uuid4", default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     cpf = models.CharField('CPF', max_length=11)
         
@@ -92,6 +95,7 @@ class Customer(models.Model):
         return self.user.name
 
 class Establishment(models.Model):
+    code = models.UUIDField("Código uuid4", default=uuid.uuid4, editable=False)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)    
     cnpj = models.CharField('CNPJ', max_length=14)
     

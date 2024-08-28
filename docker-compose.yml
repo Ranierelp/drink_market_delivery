@@ -12,9 +12,9 @@ services:
     env_file:
       - ./dotenv_files/.env
     depends_on:
-      - market_db
-  market_db:
-    container_name: market_db
+      - delivery_db
+  delivery_db:
+    container_name: delivery_db
     image: postgres:13-alpine
     volumes:
       - ./data/postgres/data:/var/lib/postgresql/data/

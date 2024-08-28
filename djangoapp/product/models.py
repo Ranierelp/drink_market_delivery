@@ -1,7 +1,9 @@
+import uuid
 from django.db import models
 from user.models import CustomUser
 from category.models import Category
 class Product(models.Model):
+    code = models.UUIDField("Código uuid4", default=uuid.uuid4, editable=False)
     name = models.CharField('Name', max_length=255)
     description = models.TextField('Description', null=True, blank=True)
     price = models.DecimalField('Price', max_digits=10, decimal_places=2)
@@ -18,6 +20,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 class order(models.Model):
+    code = models.UUIDField("Código uuid4", default=uuid.uuid4, editable=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     total = models.DecimalField('Total', max_digits=10, decimal_places=2)
     created_at = models.DateTimeField('Created At', auto_now_add=True)
@@ -31,6 +34,7 @@ class order(models.Model):
         return f'{self.user.name} - {self.total}'
     
 class orderItem(models.Model):
+    code = models.UUIDField("Código uuid4", default=uuid.uuid4, editable=False)
     order = models.ForeignKey(order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     

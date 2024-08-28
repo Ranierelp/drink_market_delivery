@@ -32,8 +32,8 @@ RUN python -m venv /venv && \
     mkdir -p /data/web/static && \
     mkdir -p /data/web/media && \
     chmod -R 755 /data/web && \
-    chmod -R +x /scripts
-
+    chmod -R +x /scripts && \
+    chmod -R 755 *
 
 # Adiciona a pasta scripts e venv/bin 
 # no $PATH do container.

@@ -3,6 +3,6 @@
 # O shell irá encerrar a execução do script quando um comando falhar
 set -e
 
-collectstatic.sh
+wait_psql.sh
 migrate.sh
 runserver.sh
