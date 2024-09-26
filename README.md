@@ -1,8 +1,6 @@
 # Drink and Market Delivery
 
-![Django Rest Framework](https://img.shields.io/badge/Django_Rest_Framework-092E20?style=for-the-badge&logo=django&logoColor=white)&nbsp;
-![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-
+![Telas Principais](image/Delivery.jpg)
 
 ## 📚 Descrição
 
